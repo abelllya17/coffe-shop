@@ -191,6 +191,7 @@
       <select name="mode" id="mode-select" class="form-select mb-3" onchange="updateInputs()">
         <option value="1">1 Item → 1 Item</option>
         <option value="2">2 Item → 1 Item</option>
+        <option value="3">2 Item → 2 Item</option>
       </select>
 
       <div id="item-inputs">
@@ -240,6 +241,20 @@
         container.innerHTML = `
           <label class="form-label">Pilih Item</label>
           <select name="item1" class="form-select" required>
+            {% for item in items %}
+            <option value="{{ item }}">{{ item }}</option>
+            {% endfor %}
+          </select>
+        `;
+      } else if (mode == "2") {
+        container.innerHTML = `
+          <label class="form-label">Pilih Item</label>
+          <select name="item1" class="form-select mb-2" required>
+            {% for item in items %}
+            <option value="{{ item }}">{{ item }}</option>
+            {% endfor %}
+          </select>
+          <select name="item2" class="form-select" required>
             {% for item in items %}
             <option value="{{ item }}">{{ item }}</option>
             {% endfor %}

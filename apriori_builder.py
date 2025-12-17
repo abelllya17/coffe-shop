@@ -35,16 +35,26 @@ def generate_rules(csv_path, min_support, min_confidence):
 
     rules_dict_1to1 = {}
     rules_dict_2to1 = {}
+    rules_dict_2to2 = {}   # 🔥 BARU
 
     for r in rules:
+        # 1 → 1
         if len(r.lhs) == 1 and len(r.rhs) == 1:
             lhs = list(r.lhs)[0]
             rhs = list(r.rhs)[0]
             rules_dict_1to1.setdefault(lhs, []).append(rhs)
 
-        if len(r.lhs) == 2 and len(r.rhs) == 1:
+        # 2 → 1
+        elif len(r.lhs) == 2 and len(r.rhs) == 1:
             lhs = tuple(sorted(r.lhs))
             rhs = list(r.rhs)[0]
             rules_dict_2to1.setdefault(lhs, []).append(rhs)
 
-    return rules_dict_1to1, rules_dict_2to1, items
+        # 🔥 2 → 2
+        elif len(r.lhs) == 2 and len(r.rhs) == 2:
+            lhs = tuple(sorted(r.lhs))
+            rhs = tuple(sorted(r.rhs))
+            rules_dict_2to2.setdefault(lhs, []).append(rhs)
+
+    return rules_dict_1to1, rules_dict_2to1, rules_dict_2to2, items
+

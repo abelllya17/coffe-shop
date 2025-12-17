@@ -14,22 +14,24 @@ def index():
     # 🔥 TOP 10 SUB-CATEGORY
     labels, values = get_subcategory_sales(CSV_PATH, top_n=10)
 
-    rules_1to1, rules_2to1, items = generate_rules(
+    rules_1to1, rules_2to1, rules_2to2, items = generate_rules(
         CSV_PATH,
         min_support,
         min_confidence
     )
+
 
     if request.method == "POST":
         min_support = float(request.form.get("min_support"))
         min_confidence = float(request.form.get("min_confidence"))
         mode = int(request.form.get("mode"))
 
-        rules_1to1, rules_2to1, items = generate_rules(
+        rules_1to1, rules_2to1, rules_2to2, items = generate_rules(
             CSV_PATH,
             min_support,
             min_confidence
         )
+
 
         if mode == 1:
             item1 = request.form.get("item1")
@@ -40,6 +42,19 @@ def index():
             item2 = request.form.get("item2")
             key = tuple(sorted([item1, item2]))
             result = rules_2to1.get(key)
+
+        elif mode == 3:
+            item1 = request.form.get("item1")
+            item2 = request.form.get("item2")
+            key = tuple(sorted([item1, item2]))
+            raw_result = rules_2to2.get(key)
+
+            if raw_result:
+                result = [
+                    f"{item1}, {item2} → {', '.join(r)}"
+                    for r in raw_result
+                ]
+
 
     return render_template(
         "index.html",
